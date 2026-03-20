@@ -26,7 +26,7 @@ RUN chown -R www-data:www-data /var/www/html \
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Install JS dependencies & build assets
-RUN npm install && npm run build
+
 
 # Write custom nginx config directly
 RUN rm -f /etc/nginx/sites-enabled/default && \
