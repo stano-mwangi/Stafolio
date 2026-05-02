@@ -47,7 +47,7 @@
 
     <button 
         @click="chatOpen = true"
-        class="px-7 py-3 p-2 bg-[#2b1761] text-black rounded-xl text-md font-semibold hover:bg-[#402a87] transition duration-200 shadow-md border border-[#3d2a7c]">
+        class="px-7 py-3 p-2 bg-[#2b1761] text-white rounded-xl text-md font-semibold hover:bg-[#402a87] transition duration-200 shadow-md border border-[#3d2a7c]">
         Talk to my Agent
     </button>
 

@@ -50,7 +50,7 @@ feel free to reach out using the form below.
 </div>
 @endif
 
-<form method="POST" action="{{ route('contact.send') }}" class="space-y-6 p-2">
+<form method="POST" action="{{ route('contact.send') }}" class="space-y-6 ">
 
 @csrf
 
