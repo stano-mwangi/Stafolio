@@ -20,15 +20,12 @@
         @endif
     </head>
     <body class="bg-gradient-to-br from-[#1f1435] via-[#4a2f7d] to-[#f8ede5] text-[#1f1b2a] min-h-screen flex flex-col items-center px-4 py-6 lg:px-8 lg:py-10">
-      
-        <header class="w-full lg:max-w-4xl max-w-[335px] mb-6 bg-[#f7f1e8] border border-[#e5d2bd] rounded-2xl shadow-lg p-3 lg:p-4 not-has-[nav]:hidden">
-          
-    @include('partials.navbar')
-        </header>
+       @include('partials.navbar')
+        
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
 
-<div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-black text-black px-6 py-12">
 
+<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:scale-105 transition">
 <div class="max-w-6xl mx-auto mt-12">
 
 <!-- PAGE TITLE -->
@@ -37,7 +34,7 @@
 About Me
 </h1>
 
-<p class="text-gray-300 max-w-3xl mb-12">
+<p class="text-gray-300 max-w-3xl">
 I am a Computer Science graduate from Karatina University with strong interest in
 backend development, cybersecurity, automation and AI-driven systems.
 I enjoy building practical systems that combine software engineering with
@@ -178,7 +175,7 @@ Talk to my Agent
 
 </div>
 
-        
+</div>     
 
     </body>
 </html>

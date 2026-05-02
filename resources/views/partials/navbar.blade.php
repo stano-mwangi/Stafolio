@@ -4,9 +4,6 @@
         <a href="{{ route('projects') }}">Projects</a>
        <a href="{{ route('about') }}">About</a>
         <a href="{{ route('contact') }}">Contact</a>
-    </div>
-
-    <div>
         @auth
             <a href="{{ route('dashboard') }}">Profile</a>
         @else

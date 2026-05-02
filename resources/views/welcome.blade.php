@@ -20,17 +20,14 @@
         @endif
     </head>
     <body class="bg-gradient-to-br from-[#1f1435] via-[#4a2f7d] to-[#f8ede5] text-[#1f1b2a] min-h-screen flex flex-col items-center px-4 py-6 lg:px-8 lg:py-10">
+          @include('partials.navbar')
       
-        <header class="w-full lg:max-w-4xl max-w-[335px] mb-6 bg-[#f7f1e8] border border-[#e5d2bd] rounded-2xl shadow-lg p-3 lg:p-4 not-has-[nav]:hidden">
-          
-    @include('partials.navbar')
-        </header>
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
            <main 
     x-data="{ chatOpen: false }"
     class="w-full max-w-4xl mx-auto rounded-3xl border border-[#d7c5b6] bg-white/90 backdrop-blur-sm shadow-[0_16px_50px_-20px_rgba(0,0,0,0.5)] p-6 lg:p-10 text-center">
 
-   <div x-show="!chatOpen" class="flex flex-col items-center gap-3">
+   <div x-show="!chatOpen" class="flex flex-col items-center gap-3">                                    
 
     <div class="w-full text-left border border-[#dfc6a8] bg-[#f7f1e9] rounded-2xl p-4 shadow-sm mb-4">
       <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#5f3f7a]">Profile</p>
@@ -50,7 +47,7 @@
 
     <button 
         @click="chatOpen = true"
-        class="px-7 py-3 bg-[#2b1761] text-white rounded-xl text-lg font-semibold hover:bg-[#402a87] transition duration-200 shadow-md border border-[#3d2a7c]">
+        class="px-7 py-3 p-2 bg-[#2b1761] text-black rounded-xl text-md font-semibold hover:bg-[#402a87] transition duration-200 shadow-md border border-[#3d2a7c]">
         Talk to my Agent
     </button>
 
@@ -73,7 +70,7 @@
 
             <button
                 type="submit"
-                class="bg-[#4b2c92] text-white px-5 py-2 rounded-xl hover:bg-[#5f3ca9] transition duration-200 shadow-sm border border-[#3f2a7d]"
+                class="bg-[#4b2c92] text-black px-5 py-2 rounded-xl hover:bg-[#5f3ca9] transition duration-200 shadow-sm border border-[#3f2a7d]"
             >
                 Send
             </button>

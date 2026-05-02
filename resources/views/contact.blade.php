@@ -20,11 +20,8 @@
         @endif
     </head>
     <body class="bg-gradient-to-br from-[#1f1435] via-[#4a2f7d] to-[#f8ede5] text-[#1f1b2a] min-h-screen flex flex-col items-center px-4 py-6 lg:px-8 lg:py-10">
-      
-        <header class="w-full lg:max-w-4xl max-w-[335px] mb-6 bg-[#f7f1e8] border border-[#e5d2bd] rounded-2xl shadow-lg p-3 lg:p-4 not-has-[nav]:hidden">
-          
-    @include('partials.navbar')
-        </header>
+          @include('partials.navbar')
+        
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
 
 <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:scale-105 transition">
@@ -53,7 +50,7 @@ feel free to reach out using the form below.
 </div>
 @endif
 
-<form method="POST" action="{{ route('contact.send') }}" class="space-y-6">
+<form method="POST" action="{{ route('contact.send') }}" class="space-y-6 p-2">
 
 @csrf
 
