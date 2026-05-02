@@ -1,5 +1,4 @@
-<nav class="flex justify-between items-center p-6 text-gray-800 bg-white shadow-md">
-     <a href="/" class="text-2xl font-bold">Stanley</a>
+<nav class="flex justify-between items-center p-6 text-white">
     <div class="flex space-x-8">
         <a href="/" class="font-semibold">Home</a>
         <a href="{{ route('projects') }}">Projects</a>
