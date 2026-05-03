@@ -85,13 +85,13 @@
 
     <p class="text-[15px] lg:text-lg text-[#4a3e57] mb-8 max-w-2xl mx-auto leading-relaxed">
         {{ getContent('home.description') }}
-
+<div class="flex items-center gap-4 justify-center">
     <button 
         @click="chatOpen = true"
         class="px-7 py-3 p-2 bg-[#2b1761] text-white rounded-xl text-md font-semibold hover:bg-[#402a87] transition duration-200 shadow-md border border-[#3d2a7c]">
         Talk to my Agent
     </button>
-
+</div>
 </div>
 <div x-show="chatOpen" x-transition class="w-full max-w-2xl mx-auto">
 

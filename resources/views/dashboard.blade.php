@@ -16,28 +16,30 @@
 
             <!-- Tabs Navigation -->
             <div class="mb-6 border-b border-gray-200">
-                <nav class="flex gap-8" aria-label="Tabs">
-                    <button type="button" onclick="showTab('home')" id="home-tab" class="tab-btn active py-2 px-1 border-b-2 border-indigo-500 font-medium text-sm text-indigo-600 hover:text-indigo-700 hover:border-indigo-400">
-                        Home Page
-                    </button>
-                    <button type="button" onclick="showTab('about')" id="about-tab" class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                        About Page
-                    </button>
-                    <button type="button" onclick="showTab('projects')" id="projects-tab" class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                        Projects
-                    </button>
-                    <button type="button" onclick="showTab('skills')" id="skills-tab" class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                        Skills
-                    </button>
-                    <button type="button" onclick="showTab('technologies')" id="technologies-tab" class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                        Technologies
-                    </button>
-                    <button type="button" onclick="showTab('education')" id="education-tab" class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                        Education
-                    </button>
-                    <button type="button" onclick="showTab('contact')" id="contact-tab" class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                        Contact
-                    </button>
+                <nav class="flex gap-8 overflow-x-auto scrollbar-hide lg:overflow-x-visible" aria-label="Tabs" style="-webkit-overflow-scrolling: touch;">
+                    <div class="flex gap-8 min-w-max lg:min-w-0">
+                        <button type="button" onclick="showTab('home')" id="home-tab" class="tab-btn active py-2 px-1 border-b-2 border-indigo-500 font-medium text-sm text-indigo-600 hover:text-indigo-700 hover:border-indigo-400 whitespace-nowrap">
+                            Home Page
+                        </button>
+                        <button type="button" onclick="showTab('about')" id="about-tab" class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+                            About Page
+                        </button>
+                        <button type="button" onclick="showTab('projects')" id="projects-tab" class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+                            Projects
+                        </button>
+                        <button type="button" onclick="showTab('skills')" id="skills-tab" class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+                            Skills
+                        </button>
+                        <button type="button" onclick="showTab('technologies')" id="technologies-tab" class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+                            Technologies
+                        </button>
+                        <button type="button" onclick="showTab('education')" id="education-tab" class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+                            Education
+                        </button>
+                        <button type="button" onclick="showTab('contact')" id="contact-tab" class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+                            Contact
+                        </button>
+                    </div>
                 </nav>
             </div>
 
@@ -467,19 +469,60 @@
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.add('hidden');
             });
-            
+
             // Remove active state from all buttons
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('border-indigo-500', 'text-indigo-600');
                 btn.classList.add('border-transparent', 'text-gray-500');
             });
-            
+
             // Show selected tab
             document.getElementById(tabName).classList.remove('hidden');
-            
+
             // Add active state to clicked button
             document.getElementById(tabName + '-tab').classList.add('border-indigo-500', 'text-indigo-600');
             document.getElementById(tabName + '-tab').classList.remove('border-transparent', 'text-gray-500');
+
+            // On mobile, scroll the active tab into view
+            if (window.innerWidth < 1024) {
+                const activeTab = document.getElementById(tabName + '-tab');
+                if (activeTab) {
+                    activeTab.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                        inline: 'center'
+                    });
+                }
+            }
         }
+
+        // Mobile-specific enhancements
+        document.addEventListener('DOMContentLoaded', function() {
+            const nav = document.querySelector('nav[aria-label="Tabs"]');
+
+            if (nav && window.innerWidth < 1024) {
+                // Prevent page scroll when touching tabs on mobile
+                nav.addEventListener('touchstart', function(e) {
+                    // Allow normal touch behavior for scrolling tabs
+                    e.stopPropagation();
+                }, { passive: true });
+
+                nav.addEventListener('touchmove', function(e) {
+                    // Prevent page scroll when scrolling tabs horizontally
+                    if (this.scrollWidth > this.clientWidth) {
+                        e.stopPropagation();
+                    }
+                }, { passive: true });
+
+                // Add visual indicator for scrollable tabs
+                const checkScrollable = () => {
+                    const isScrollable = nav.scrollWidth > nav.clientWidth;
+                    nav.classList.toggle('is-scrollable', isScrollable);
+                };
+
+                checkScrollable();
+                window.addEventListener('resize', checkScrollable);
+            }
+        });
     </script>
 </x-app-layout>
