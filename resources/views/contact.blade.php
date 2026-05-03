@@ -24,8 +24,8 @@
         
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
 
-<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:scale-105 transition">
-<div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-black text-black px-6 py-12">
+<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-2 hover:scale-105 transition">
+<div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-800 to-black text-black px-6 py-12">
 <div class="max-w-6xl mx-auto mt-12">
 
 <h1 class="text-4xl font-bold mb-6">
@@ -41,7 +41,7 @@ Contact Me
 
 <!-- CONTACT FORM -->
 
-<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-8">
+<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-2">
 
 @if(session('success'))
 <div class="bg-green-500 text-white p-3 rounded mb-4">
