@@ -6,6 +6,9 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
@@ -24,7 +27,46 @@
       
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
            <main 
-    x-data="{ chatOpen: false }"
+    x-data="{
+        chatOpen: false,
+        question: '',
+        response: '',
+        error: '',
+        loading: false,
+        async submitQuestion() {
+            if (!this.question.trim()) return;
+            
+            this.loading = true;
+            this.error = '';
+            this.response = '';
+            
+            try {
+                const response = await fetch('/ask-agent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        question: this.question
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    this.response = data.answer;
+                } else {
+                    this.error = data.error || 'An error occurred. Please try again.';
+                }
+            } catch (error) {
+                this.error = 'Network error. Please check your connection and try again.';
+                console.error('AI Agent Error:', error);
+            } finally {
+                this.loading = false;
+            }
+        }
+    }"
     class="w-full max-w-4xl mx-auto rounded-3xl border border-[#d7c5b6] bg-white/90 backdrop-blur-sm shadow-[0_16px_50px_-20px_rgba(0,0,0,0.5)] p-6 lg:p-10 text-center">
 
    <div x-show="!chatOpen" class="flex flex-col items-center gap-3">                                    
@@ -59,22 +101,52 @@
             Ask My AI Agent
         </h2>
 
-        <form class="flex flex-col lg:flex-row gap-3">
+        <form 
+            @submit.prevent="submitQuestion"
+            class="flex flex-col lg:flex-row gap-3"
+        >
 
             <input
+                x-model="question"
                 type="text"
                 placeholder="Ask something about Stanley..."
                 class="flex-1 border border-[#c9b3a2] rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#8362b0]"
+                :disabled="loading"
             >
 
             <button
                 type="submit"
-                class="bg-[#4b2c92] text-black px-5 py-2 rounded-xl hover:bg-[#5f3ca9] transition duration-200 shadow-sm border border-[#3f2a7d]"
+                :disabled="loading || !question.trim()"
+                class="bg-[#4b2c92] text-white px-5 py-2 rounded-xl hover:bg-[#5f3ca9] disabled:opacity-50 disabled:cursor-not-allowed transition duration-200 shadow-sm border border-[#3f2a7d]"
             >
-                Send
+                <span x-show="!loading">Send</span>
+                <span x-show="loading" class="flex items-center">
+                    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Thinking...
+                </span>
             </button>
 
         </form>
+
+        <!-- Response Display -->
+        <div x-show="response" x-transition class="mt-4 p-4 bg-[#f0e6d2] border border-[#d6c4a9] rounded-xl">
+            <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-[#4b2c92] rounded-full flex items-center justify-center flex-shrink-0">
+                    <span class="text-white text-sm font-bold">AI</span>
+                </div>
+                <div class="flex-1">
+                    <p class="text-[#321f63] whitespace-pre-wrap" x-text="response"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Display -->
+        <div x-show="error" x-transition class="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl">
+            <p class="text-red-700" x-text="error"></p>
+        </div>
 
     </div>
 <button 

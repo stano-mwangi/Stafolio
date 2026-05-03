@@ -149,7 +149,7 @@ Career Timeline
 <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 mb-4 timeline-item">
     <div class="flex justify-between items-start mb-2">
         <h3 class="text-xl font-semibold">{{ $edu->degree }}</h3>
-        <span class="text-sm text-indigo-300">{{ $edu->year_from }} - {{ $edu->year_to ?? 'Present' }}</span>
+        <span class="text-sm text-black">{{ $edu->year_from }} - {{ $edu->year_to ?? 'Present' }}</span>
     </div>
     <p class="text-gray-300 mb-2">{{ $edu->institution }}</p>
     @if($edu->description)
@@ -160,7 +160,7 @@ Career Timeline
 <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 mb-4">
     <div class="flex justify-between items-start mb-2">
         <h3 class="text-xl font-semibold">Bachelor of Science in Computer Science</h3>
-        <span class="text-sm text-indigo-300">2020 - 2024</span>
+        <span class="text-sm text-black">2020 - 2024</span>
     </div>
     <p class="text-gray-300 mb-2">Karatina University</p>
 </div>
