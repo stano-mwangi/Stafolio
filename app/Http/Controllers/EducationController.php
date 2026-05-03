@@ -13,7 +13,7 @@ class EducationController extends Controller
     public function index()
     {
         $education = Education::orderBy('year_from', 'desc')->get();
-        return view('admin.education.index', compact('education'));
+        return view('dashboard', compact('education'));
     }
 
     /**
@@ -39,7 +39,7 @@ class EducationController extends Controller
 
         Education::create($validated);
 
-        return redirect()->route('admin.education.index')->with('success', 'Education entry created successfully!');
+        return redirect()->route('dashboard')->with('success', 'Education entry created successfully!');
     }
 
     /**
@@ -65,7 +65,7 @@ class EducationController extends Controller
 
         $education->update($validated);
 
-        return redirect()->route('admin.education.index')->with('success', 'Education entry updated successfully!');
+        return redirect()->route('dashboard')->with('success', 'Education entry updated successfully!');
     }
 
     /**
@@ -75,6 +75,6 @@ class EducationController extends Controller
     {
         $education->delete();
 
-        return redirect()->route('admin.education.index')->with('success', 'Education entry deleted successfully!');
+        return redirect()->route('dashboard')->with('success', 'Education entry deleted successfully!');
     }
 }

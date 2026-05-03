@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Stafolio') }}</title>
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -12,7 +12,10 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-
+<link rel="apple-touch-icon" sizes="180x180" href="/portfolio_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/portfolio_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/portfolio_io/favicon-16x16.png">
+<link rel="manifest" href="/portfolio_io/site.webmanifest">
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -71,8 +74,10 @@
 
    <div x-show="!chatOpen" class="flex flex-col items-center gap-3">                                    
 
-    <div class="w-full text-left border border-[#dfc6a8] bg-[#f7f1e9] rounded-2xl p-4 shadow-sm mb-4">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#5f3f7a]">Profile</p>
+    <div class="w-full flex justify-center mb-6">
+      <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-[#dfc6a8] shadow-sm bg-white">
+          <img src="/portfolio_io/apple-touch-icon.png" alt="Portfolio Logo" class="w-full h-full object-cover">
+      </div>
     </div>
 
     <h1 class="text-3xl lg:text-5xl font-extrabold text-[#2f1859] mb-3">
