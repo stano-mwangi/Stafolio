@@ -31,15 +31,11 @@
 <!-- PAGE TITLE -->
 
 <h1 class="text-4xl font-bold mb-6">
-About Me
+{{ getContent('about.title') }}
 </h1>
 
 <p class="text-gray-300 max-w-3xl">
-I am a Computer Science graduate from Karatina University with strong interest in
-backend development, cybersecurity, automation and AI-driven systems.
-I enjoy building practical systems that combine software engineering with
-intelligent automation.
-</p>
+{{ getContent('about.intro') }}
 
 
 <!-- PROFILE SECTION -->
@@ -60,19 +56,15 @@ Who I Am
 </h2>
 
 <p class="text-gray-300 mb-4">
-My name is Stanley Mwangi. I focus on building reliable backend systems,
-automation workflows, and security-focused applications.
+{{ getContent('about.bio') }}
 </p>
 
 <p class="text-gray-300 mb-4">
-I work with technologies such as Laravel, Linux systems, networking tools,
-and AI integrations to create efficient and scalable solutions.
+{{ getContent('about.bio2') }}
 </p>
 
 <p class="text-gray-300">
-This portfolio includes projects demonstrating my experience in web
-development, system administration, and cybersecurity tools.
-</p>
+{{ getContent('about.bio3') }}
 
 </div>
 
@@ -86,7 +78,15 @@ Skills
 </h2>
 
 <div class="grid md:grid-cols-3 gap-6 mb-16">
-
+@forelse(\App\Models\Skill::all() as $skill)
+<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6">
+<h3 class="text-xl font-semibold mb-2">{{ $skill->name }}</h3>
+<div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+    <div class="bg-indigo-600 h-3 rounded-full transition-all duration-1000 ease-out" style="width: {{ $skill->level }}%" data-width="{{ $skill->level }}"></div>
+</div>
+<p class="text-sm text-indigo-300">{{ $skill->level }}% - {{ $skill->category }}</p>
+</div>
+@empty
 <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6">
 <h3 class="text-xl font-semibold mb-2">Backend Development</h3>
 <p class="text-gray-300">
@@ -107,7 +107,7 @@ Network scanning, vulnerability analysis, penetration testing tools and security
 Workflow automation, scripting and system management in Linux environments.
 </p>
 </div>
-
+@endforelse
 </div>
 
 
@@ -118,7 +118,14 @@ Technologies
 </h2>
 
 <div class="flex flex-wrap gap-4 mb-16">
-
+@forelse(\App\Models\Technology::all() as $tech)
+<span class="px-4 py-2 bg-indigo-500 rounded-lg hover:scale-105 transition-transform cursor-pointer tech-icon" data-icon="{{ $tech->icon_class }}">
+    @if($tech->icon_class)
+        <i class="{{ $tech->icon_class }} mr-2"></i>
+    @endif
+    {{ $tech->name }}
+</span>
+@empty
 <span class="px-4 py-2 bg-indigo-500 rounded-lg">Laravel</span>
 <span class="px-4 py-2 bg-indigo-500 rounded-lg">PHP</span>
 <span class="px-4 py-2 bg-indigo-500 rounded-lg">Linux</span>
@@ -127,26 +134,63 @@ Technologies
 <span class="px-4 py-2 bg-indigo-500 rounded-lg">Nmap</span>
 <span class="px-4 py-2 bg-indigo-500 rounded-lg">Git</span>
 <span class="px-4 py-2 bg-indigo-500 rounded-lg">Docker</span>
-
+@endforelse
 </div>
 
 
-<!-- EDUCATION -->
+<!-- CAREER TIMELINE -->
 
-<h2 class="text-3xl font-semibold mb-6">
-Education
+<h2 class="text-3xl font-semibold mb-8">
+Career Timeline
 </h2>
 
-<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 mb-16">
+<div class="mb-16">
+@forelse(\App\Models\Education::orderBy('year_from', 'desc')->get() as $edu)
+<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 mb-4 timeline-item">
+    <div class="flex justify-between items-start mb-2">
+        <h3 class="text-xl font-semibold">{{ $edu->degree }}</h3>
+        <span class="text-sm text-indigo-300">{{ $edu->year_from }} - {{ $edu->year_to ?? 'Present' }}</span>
+    </div>
+    <p class="text-gray-300 mb-2">{{ $edu->institution }}</p>
+    @if($edu->description)
+        <p class="text-gray-400 text-sm">{{ $edu->description }}</p>
+    @endif
+</div>
+@empty
+<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 mb-4">
+    <div class="flex justify-between items-start mb-2">
+        <h3 class="text-xl font-semibold">Bachelor of Science in Computer Science</h3>
+        <span class="text-sm text-indigo-300">2020 - 2024</span>
+    </div>
+    <p class="text-gray-300 mb-2">Karatina University</p>
+</div>
+@endforelse
+</div>
 
-<h3 class="text-xl font-semibold">
-Bachelor of Science in Computer Science
-</h3>
 
-<p class="text-gray-300">
-Karatina University — 2020 to 2024
-</p>
+<!-- GITHUB STATISTICS PLACEHOLDER -->
 
+<h2 class="text-3xl font-semibold mb-8">
+GitHub Statistics
+</h2>
+
+<div class="grid md:grid-cols-4 gap-6 mb-16">
+<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 text-center">
+    <div class="text-2xl font-bold text-indigo-400 mb-2" id="repos-count">25+</div>
+    <p class="text-gray-300">Repositories</p>
+</div>
+<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 text-center">
+    <div class="text-2xl font-bold text-indigo-400 mb-2" id="commits-count">500+</div>
+    <p class="text-gray-300">Commits</p>
+</div>
+<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 text-center">
+    <div class="text-2xl font-bold text-indigo-400 mb-2" id="stars-count">50+</div>
+    <p class="text-gray-300">Stars</p>
+</div>
+<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 text-center">
+    <div class="text-2xl font-bold text-indigo-400 mb-2" id="followers-count">100+</div>
+    <p class="text-gray-300">Followers</p>
+</div>
 </div>
 
 
@@ -179,3 +223,111 @@ Talk to my Agent
 
     </body>
 </html>
+
+<script>
+// Animate skill bars on scroll
+function animateSkillBars() {
+    const skillBars = document.querySelectorAll('.bg-indigo-600');
+    skillBars.forEach(bar => {
+        const width = bar.getAttribute('data-width');
+        bar.style.width = '0%';
+        setTimeout(() => {
+            bar.style.width = width + '%';
+        }, 500);
+    });
+}
+
+// Animate timeline items on scroll
+function animateTimeline() {
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    timelineItems.forEach((item, index) => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(-50px)';
+        setTimeout(() => {
+            item.style.transition = 'all 0.6s ease-out';
+            item.style.opacity = '1';
+            item.style.transform = 'translateX(0)';
+        }, index * 200);
+    });
+}
+
+// Tech stack hover effects
+function initTechStack() {
+    const techIcons = document.querySelectorAll('.tech-icon');
+    techIcons.forEach(icon => {
+        icon.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.1) rotate(5deg)';
+            this.style.boxShadow = '0 10px 25px rgba(99, 102, 241, 0.3)';
+        });
+        icon.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1) rotate(0deg)';
+            this.style.boxShadow = 'none';
+        });
+    });
+}
+
+// GitHub stats animation
+function animateGitHubStats() {
+    const stats = [
+        { id: 'repos-count', target: 25 },
+        { id: 'commits-count', target: 500 },
+        { id: 'stars-count', target: 50 },
+        { id: 'followers-count', target: 100 }
+    ];
+
+    stats.forEach(stat => {
+        const element = document.getElementById(stat.id);
+        let current = 0;
+        const increment = stat.target / 50;
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= stat.target) {
+                current = stat.target;
+                clearInterval(timer);
+            }
+            element.textContent = Math.floor(current) + (stat.target > 100 ? '+' : '');
+        }, 50);
+    });
+}
+
+// Intersection Observer for animations
+function initScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (entry.target.classList.contains('timeline-item')) {
+                    animateTimeline();
+                } else if (entry.target.querySelector('.bg-indigo-600')) {
+                    animateSkillBars();
+                } else if (entry.target.id === 'github-stats') {
+                    animateGitHubStats();
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements
+    document.querySelectorAll('.timeline-item').forEach(item => observer.observe(item));
+    document.querySelectorAll('[class*="bg-indigo-600"]').forEach(bar => observer.observe(bar.parentElement));
+    const githubStats = document.getElementById('github-stats');
+    if (githubStats) observer.observe(githubStats);
+}
+
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initTechStack();
+    initScrollAnimations();
+
+    // Trigger initial animations after a short delay
+    setTimeout(() => {
+        animateSkillBars();
+        animateTimeline();
+        animateGitHubStats();
+    }, 1000);
+});
+</script>

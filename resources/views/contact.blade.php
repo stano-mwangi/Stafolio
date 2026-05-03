@@ -33,8 +33,7 @@ Contact Me
 </h1>
 
 <p class="text-gray-300 mb-10 max-w-2xl">
-If you would like to collaborate, discuss a project, or ask any questions,
-feel free to reach out using the form below.
+{{ getContactInfo('contact.intro') }}
 </p>
 
 
@@ -99,7 +98,7 @@ Send Message
 <div>
 
 <h2 class="text-2xl font-semibold mb-6">
-Get in Touch
+{{ getContactInfo('contact.get_in_touch') }}
 </h2>
 
 <p class="text-gray-300 mb-8">
@@ -110,17 +109,17 @@ You can also reach me through the following channels.
 
 <div>
 <p class="font-semibold">Email</p>
-<p class="text-gray-300">stanomwangi2020@gmail.com</p>
+<p class="text-gray-300">{{ getContactInfo('contact.email') }}</p>
 </div>
 
 <div>
 <p class="font-semibold">Phone</p>
-<p class="text-gray-300">0768181843</p>
+<p class="text-gray-300">{{ getContactInfo('contact.phone') }}</p>
 </div>
 
 <div>
 <p class="font-semibold">Location</p>
-<p class="text-gray-300">Nairobi, Kenya</p>
+<p class="text-gray-300">{{ getContactInfo('contact.location') }}</p>
 </div>
 
 </div>
@@ -131,20 +130,20 @@ You can also reach me through the following channels.
 <div class="mt-10">
 
 <h3 class="text-xl font-semibold mb-4">
-Connect Online
+{{ getContactInfo('contact.connect_online') }}
 </h3>
 
 <div class="flex gap-6">
 
-<a href="#" class="hover:text-indigo-400">
+<a href="{{ getContactInfo('contact.github_url') }}" class="hover:text-indigo-400 transition-colors">
 GitHub
 </a>
 
-<a href="#" class="hover:text-indigo-400">
+<a href="{{ getContactInfo('contact.linkedin_url') }}" class="hover:text-indigo-400 transition-colors">
 LinkedIn
 </a>
 
-<a href="#" class="hover:text-indigo-400">
+<a href="{{ getContactInfo('contact.twitter_url') }}" class="hover:text-indigo-400 transition-colors">
 Twitter
 </a>
 

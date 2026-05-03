@@ -34,8 +34,7 @@ Projects
 </h1>
 
 <p class="text-gray-300 mb-10">
-A selection of projects demonstrating my experience with backend development,
-automation, security tools, and modern web technologies.
+{{ getContent('projects.description') }}
 </p>
 
 
@@ -43,144 +42,30 @@ automation, security tools, and modern web technologies.
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-
+@forelse(\App\Models\Project::all() as $project)
 <!-- PROJECT CARD -->
 <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:scale-105 transition">
 
 <h2 class="text-xl font-semibold mb-3">
-AI Portfolio Agent
+{{ $project->title }}
 </h2>
 
 <p class="text-gray-300 mb-4">
-A portfolio website integrated with an AI agent that answers questions
-about my experience, skills and projects.
+{{ $project->description }}
 </p>
 
-<div class="text-sm text-indigo-300 mb-4">
-Laravel • n8n • OpenAI
-</div>
-
-<a href="#" class="text-indigo-400 hover:underline">
+@if($project->link)
+<a href="{{ $project->link }}" target="_blank" class="text-indigo-400 hover:underline">
 View Project →
 </a>
+@endif
 
 </div>
-
-
-<!-- PROJECT CARD -->
-<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:scale-105 transition">
-
-<h2 class="text-xl font-semibold mb-3">
-Network Security Scanner
-</h2>
-
-<p class="text-gray-300 mb-4 mx-2">
-A security tool that automates port scanning and vulnerability
-analysis using Nmap and custom scripts.
-</p>
-
-<div class="text-sm text-indigo-300 mb-4">
-Python • Nmap • Linux
+@empty
+<div class="col-span-full text-center text-gray-300 py-12">
+    <p>No projects found. Check back soon!</p>
 </div>
-
-<a href="#" class="text-indigo-400 hover:underline">
-View Project →
-</a>
-
-</div>
-
-
-<!-- PROJECT CARD -->
-<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:scale-105 transition">
-
-<h2 class="text-xl font-semibold mb-3">
-Exchange Mail Server Setup
-</h2>
-
-<p class="text-gray-300 mb-4">
-Deployed and configured Microsoft Exchange including SMTP,
-POP3, IMAP connectors and Outlook integration.
-</p>
-
-<div class="text-sm text-indigo-300 mb-4">
-Exchange Server • Windows Server
-</div>
-
-<a href="#" class="text-indigo-400 hover:underline">
-View Project →
-</a>
-
-</div>
-
-
-<!-- PROJECT CARD -->
-<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:scale-105 transition">
-
-<h2 class="text-xl font-semibold mb-3">
-Linux System Automation
-</h2>
-
-<p class="text-gray-300 mb-4">
-Automation scripts for server monitoring, log analysis and
-system maintenance in Linux environments.
-</p>
-
-<div class="text-sm text-indigo-300 mb-4">
-Bash • Linux • Automation
-</div>
-
-<a href="#" class="text-indigo-400 hover:underline">
-View Project →
-</a>
-
-</div>
-
-
-<!-- PROJECT CARD -->
-<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:scale-105 transition">
-
-<h2 class="text-xl font-semibold mb-3">
-USB Recovery Tool
-</h2>
-
-<p class="text-gray-300 mb-4">
-A Linux utility to repair corrupted flash drives and restore
-filesystems using low-level disk tools.
-</p>
-
-<div class="text-sm text-indigo-300 mb-4">
-Linux • Disk Utilities
-</div>
-
-<a href="#" class="text-indigo-400 hover:underline">
-View Project →
-</a>
-
-</div>
-
-
-<!-- PROJECT CARD -->
-<div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:scale-105 transition">
-
-<h2 class="text-xl font-semibold mb-3">
-Cybersecurity Lab
-</h2>
-
-<p class="text-gray-300 mb-4">
-A personal penetration testing lab built with Kali Linux for
-learning exploitation techniques and security analysis.
-</p>
-
-<div class="text-sm text-indigo-300 mb-4">
-Kali Linux • Metasploit • Nmap
-</div>
-
-<a href="#" class="text-indigo-400 hover:underline">
-View Project →
-</a>
-
-</div>
-
+@endforelse
 
 </div>
 

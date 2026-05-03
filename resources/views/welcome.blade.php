@@ -34,16 +34,15 @@
     </div>
 
     <h1 class="text-3xl lg:text-5xl font-extrabold text-[#2f1859] mb-3">
-        Hi, I’m Stanley
+        {{ getContent('home.title') }}
     </h1>
 
     <h2 class="text-xl lg:text-3xl font-semibold text-[#5f347f] mb-4">
-        AI-Powered Developer
+        {{ getContent('home.subtitle') }}
     </h2>
 
     <p class="text-[15px] lg:text-lg text-[#4a3e57] mb-8 max-w-2xl mx-auto leading-relaxed">
-        Discover my projects and profile in a refined warm royal interface. This is designed with clear cards, strong borders, and visible actions.
-    </p>
+        {{ getContent('home.description') }}
 
     <button 
         @click="chatOpen = true"
