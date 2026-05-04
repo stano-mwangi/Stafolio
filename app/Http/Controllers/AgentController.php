@@ -19,10 +19,35 @@ class AgentController extends Controller
         try {
             // Validate input
             $validated = $request->validate([
-                'question' => 'required|string|max:1000|min:3'
+                'question' => 'required|string|max:1000|min:3',
+                'history' => 'sometimes|array'
             ]);
 
             $question = trim($validated['question']);
+            $history = $request->input('history', []);
+
+            if (!is_array($history)) {
+                throw new \Exception('Invalid conversation history format.');
+            }
+
+            $validatedHistory = [];
+            foreach ($history as $message) {
+                if (!is_array($message) || !isset($message['role'], $message['content'])) {
+                    throw new \Exception('Invalid conversation history format.');
+                }
+
+                $role = $message['role'];
+                $content = trim($message['content']);
+
+                if (!in_array($role, ['user', 'assistant'], true) || $content === '') {
+                    continue;
+                }
+
+                $validatedHistory[] = [
+                    'role' => $role,
+                    'content' => $content,
+                ];
+            }
 
             // Fetch portfolio data
             $portfolioData = $this->getPortfolioData();
@@ -30,8 +55,8 @@ class AgentController extends Controller
             // Create system prompt
             $systemPrompt = $this->createSystemPrompt($portfolioData);
 
-            // Call OpenRouter API
-            $response = $this->callOpenRouterAPI($systemPrompt, $question);
+            // Call OpenRouter API with full conversation history
+            $response = $this->callOpenRouterAPI($systemPrompt, $validatedHistory, $question);
 
             return response()->json([
                 'answer' => $response
@@ -83,7 +108,7 @@ INSTRUCTIONS:
 Remember: You are speaking as Stanley's professional representative, not as an AI.";
     }
 
-    private function callOpenRouterAPI($systemPrompt, $userQuestion)
+    private function callOpenRouterAPI($systemPrompt, array $history, $userQuestion)
     {
         $apiKey = config('services.openrouter.key') ?? env('OPENROUTER_API_KEY');
         $baseUrl = config('services.openrouter.url') ?? env('OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1');
@@ -91,6 +116,28 @@ Remember: You are speaking as Stanley's professional representative, not as an A
 
         if (!$apiKey) {
             throw new \Exception('OpenRouter API key not configured');
+        }
+
+        $messages = [
+            [
+                'role' => 'system',
+                'content' => $systemPrompt
+            ]
+        ];
+
+        foreach ($history as $message) {
+            $messages[] = [
+                'role' => $message['role'],
+                'content' => $message['content'],
+            ];
+        }
+
+        $lastMessage = end($history);
+        if (!$lastMessage || $lastMessage['role'] !== 'user' || $lastMessage['content'] !== $userQuestion) {
+            $messages[] = [
+                'role' => 'user',
+                'content' => $userQuestion
+            ];
         }
 
         $response = Http::timeout(30)
@@ -102,16 +149,7 @@ Remember: You are speaking as Stanley's professional representative, not as an A
             ])
             ->post($baseUrl . '/chat/completions', [
                 'model' => $model,
-                'messages' => [
-                    [
-                        'role' => 'system',
-                        'content' => $systemPrompt
-                    ],
-                    [
-                        'role' => 'user',
-                        'content' => $userQuestion
-                    ]
-                ],
+                'messages' => $messages,
                 'max_tokens' => 500,
                 'temperature' => 0.7,
             ]);

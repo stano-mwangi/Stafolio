@@ -37,16 +37,19 @@
     x-data="{
         chatOpen: false,
         question: '',
-        response: '',
+        messages: [],
         error: '',
         loading: false,
         async submitQuestion() {
-            if (!this.question.trim()) return;
-            
-            this.loading = true;
+            const prompt = this.question.trim();
+            if (!prompt) return;
+
+            const userMessage = { role: 'user', content: prompt };
+            this.messages.push(userMessage);
+            this.question = '';
             this.error = '';
-            this.response = '';
-            
+            this.loading = true;
+
             try {
                 const response = await fetch('/ask-agent', {
                     method: 'POST',
@@ -55,14 +58,15 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content')
                     },
                     body: JSON.stringify({
-                        question: this.question
+                        question: prompt,
+                        history: this.messages
                     })
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (response.ok) {
-                    this.response = data.answer;
+                    this.messages.push({ role: 'assistant', content: data.answer });
                 } else {
                     this.error = data.error || 'An error occurred. Please try again.';
                 }
@@ -72,6 +76,11 @@
             } finally {
                 this.loading = false;
             }
+        },
+        clearChat() {
+            this.messages = [];
+            this.question = '';
+            this.error = '';
         }
     }"
     class="w-full max-w-4xl mx-auto rounded-3xl border border-[#d7c5b6] bg-white/90 backdrop-blur-sm shadow-[0_16px_50px_-20px_rgba(0,0,0,0.5)] p-6 lg:p-10 text-center">
@@ -140,19 +149,34 @@
 
         </form>
 
-        <!-- Response Display -->
-        <div x-show="response" x-transition class="mt-4 p-4 bg-[#f0e6d2] border border-[#d6c4a9] rounded-xl">
-            <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-[#4b2c92] rounded-full flex items-center justify-center flex-shrink-0">
-                    <span class="text-white text-sm font-bold">AI</span>
-                </div>
-                <div class="flex-1">
-                    <p class="text-[#321f63] whitespace-pre-wrap" x-text="response"></p>
-                </div>
-            </div>
+        <div class="mt-6 flex items-center justify-between gap-4">
+            <h3 class="text-lg font-semibold text-[#321f63]">Conversation</h3>
+            <button
+                type="button"
+                @click="clearChat"
+                class="text-sm text-[#4b2c92] hover:text-[#5f3ca9] underline"
+            >
+                Clear chat
+            </button>
         </div>
 
-        <!-- Error Display -->
+        <div class="mt-4 max-h-[360px] overflow-y-auto space-y-3 pb-2">
+            <template x-if="messages.length === 0">
+                <div class="rounded-2xl border border-dashed border-[#c9b3a2] bg-[#fbf6ee] p-4 text-sm text-[#4a3e57]">
+                    Chat history will appear here. Ask a question to begin the conversation.
+                </div>
+            </template>
+
+            <template x-for="(message, index) in messages" :key="index">
+                <div :class="message.role === 'user' ? 'justify-end' : 'justify-start'" class="flex">
+                    <div :class="message.role === 'user' ? 'bg-[#4b2c92] text-white rounded-3xl rounded-br-none px-4 py-3 shadow-sm' : 'bg-[#f0e6d2] text-[#321f63] rounded-3xl rounded-bl-none px-4 py-3 shadow-sm'" class="max-w-[90%] whitespace-pre-wrap break-words">
+                        <div class="text-[11px] uppercase tracking-[0.2em] mb-2 font-semibold opacity-80" x-text="message.role === 'user' ? 'You' : 'Agent'"></div>
+                        <div x-text="message.content"></div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
         <div x-show="error" x-transition class="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl">
             <p class="text-red-700" x-text="error"></p>
         </div>
