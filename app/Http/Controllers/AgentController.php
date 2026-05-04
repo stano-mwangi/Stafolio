@@ -65,7 +65,7 @@ class AgentController extends Controller
     {
         $context = json_encode($data, JSON_PRETTY_PRINT);
 
-        return "You are a professional AI assistant representing Stanley Omwangi, a skilled developer and cybersecurity enthusiast. You have access to Stanley's complete portfolio information including their skills, technologies, education, projects, and contact details.
+        return "You are a professional AI assistant representing Stanley Mwangi, a skilled developer and cybersecurity enthusiast. You have access to Stanley's complete portfolio information including their skills, technologies, education, projects, and contact details.
 
 PORTFOLIO DATA:
 {$context}
