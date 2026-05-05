@@ -14,6 +14,91 @@
                 </div>
             @endif
 
+            <!-- Analytics Summary -->
+            <div class="grid gap-6 mb-8 lg:grid-cols-2 xl:grid-cols-4">
+                <div class="rounded-3xl bg-white p-6 shadow-sm border border-gray-200">
+                    <div class="text-sm font-semibold uppercase tracking-[0.18em] text-gray-500">Total Visits</div>
+                    <div class="mt-4 text-4xl font-bold text-gray-900">{{ $visitsTotal ?? 0 }}</div>
+                    <div class="mt-2 text-sm text-gray-500">All tracked page views from guests and authenticated users.</div>
+                </div>
+
+                <div class="rounded-3xl bg-white p-6 shadow-sm border border-gray-200">
+                    <div class="text-sm font-semibold uppercase tracking-[0.18em] text-gray-500">Unique Visitors</div>
+                    <div class="mt-4 text-4xl font-bold text-gray-900">{{ $uniqueVisitors ?? 0 }}</div>
+                    <div class="mt-2 text-sm text-gray-500">Distinct IP addresses recorded since tracking was enabled.</div>
+                </div>
+
+                <div class="rounded-3xl bg-white p-6 shadow-sm border border-gray-200">
+                    <div class="text-sm font-semibold uppercase tracking-[0.18em] text-gray-500">Recent Events</div>
+                    <div class="mt-4 text-4xl font-bold text-gray-900">{{ $eventCounts->sum('total') ?? 0 }}</div>
+                    <div class="mt-2 text-sm text-gray-500">Agent opens and contact submissions tracked automatically.</div>
+                </div>
+
+                <div class="rounded-3xl bg-white p-6 shadow-sm border border-gray-200">
+                    <div class="text-sm font-semibold uppercase tracking-[0.18em] text-gray-500">Top Event</div>
+                    <div class="mt-4 text-2xl font-semibold text-gray-900">
+                        {{ $eventCounts->first()?->event_name ?? 'None' }}
+                    </div>
+                    <div class="mt-2 text-sm text-gray-500">Most frequently recorded event by name.</div>
+                </div>
+            </div>
+
+            <div class="grid gap-6 mb-10 lg:grid-cols-3">
+                <div class="lg:col-span-2 rounded-3xl bg-white p-6 shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Recent Visits</h3>
+                            <p class="text-sm text-gray-500">Last 10 page views recorded by the tracker.</p>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Page</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">IP Address</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">User Agent</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Visited At</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                @forelse($recentVisits as $visit)
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm text-gray-900">{{ $visit->page }}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-900">{{ $visit->ip_address }}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-500 truncate max-w-[20rem]">{{ $visit->user_agent }}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-500">{{ $visit->visited_at->format('M d, Y H:i') }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-4 py-6 text-center text-sm text-gray-500">No visits recorded yet.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="rounded-3xl bg-white p-6 shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900">Top Visited Pages</h3>
+                        <p class="text-sm text-gray-500">Most requested pages by visitors.</p>
+                    </div>
+                    <div class="space-y-3">
+                        @forelse($topPages as $page)
+                            <div class="rounded-2xl border border-gray-200 p-4 bg-gray-50">
+                                <div class="flex items-center justify-between gap-4">
+                                    <span class="text-sm font-medium text-gray-900">{{ $page->page }}</span>
+                                    <span class="text-sm font-semibold text-indigo-600">{{ $page->visits }}</span>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="rounded-2xl border border-gray-200 p-4 bg-gray-50 text-sm text-gray-500">No page visits yet.</div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+
             <!-- Tabs Navigation -->
             <div class="mb-6 border-b border-gray-200">
                 <nav class="flex gap-8 overflow-x-auto scrollbar-hide lg:overflow-x-visible" aria-label="Tabs" style="-webkit-overflow-scrolling: touch;">

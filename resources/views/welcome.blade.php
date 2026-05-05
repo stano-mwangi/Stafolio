@@ -40,6 +40,25 @@
         messages: [],
         error: '',
         loading: false,
+        async openChat() {
+            this.chatOpen = true;
+
+            try {
+                await fetch('/track-event', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        event_name: 'agent_opened',
+                        metadata: { page: window.location.pathname }
+                    })
+                });
+            } catch (error) {
+                console.warn('Agent opened event tracking failed:', error);
+            }
+        },
         async submitQuestion() {
             const prompt = this.question.trim();
             if (!prompt) return;
@@ -105,7 +124,7 @@
         {{ getContent('home.description') }}
 <div class="flex items-center gap-4 justify-center">
     <button 
-        @click="chatOpen = true"
+        @click="openChat()"
         class="px-7 py-3 p-2 bg-[#2b1761] text-white rounded-xl text-md font-semibold hover:bg-[#402a87] transition duration-200 shadow-md border border-[#3d2a7c]">
         Talk to my Agent
     </button>
