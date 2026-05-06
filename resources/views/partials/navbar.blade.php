@@ -7,7 +7,7 @@
         @auth
             <a href="{{ route('dashboard') }}">Profile</a>
         @else
-            <a href="{{ route('login') }}">Login</a>
+            <a href="{{ route('login') }}">Stanley</a>
         @endauth
     </div>
 </nav>
