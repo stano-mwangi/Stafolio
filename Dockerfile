@@ -3,15 +3,14 @@ FROM php:8.4-fpm
 # Set working directory
 WORKDIR /var/www/html
 
-# Install system packages + Supervisor (no cron needed anymore)
 RUN apt-get update && apt-get install -y \
     libfreetype6-dev libjpeg62-turbo-dev libpng-dev libwebp-dev libxpm-dev \
     libzip-dev zip unzip git curl libonig-dev libxml2-dev \
-    libpq-dev nginx nodejs npm postgresql-client supervisor
+    default-mysql-client nginx nodejs npm supervisor \
+    php-mysql
 
-# Configure GD and install PHP extensions including PostgreSQL
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm && \
-    docker-php-ext-install gd pdo pdo_pgsql mbstring bcmath exif pcntl zip
+    docker-php-ext-install gd pdo pdo_mysql mbstring bcmath exif pcntl zip
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -56,6 +55,7 @@ RUN rm -f /etc/nginx/sites-enabled/default && \
     
 # Copy Supervisor config
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/ssl/ca.pem /etc/ssl/certs/ca.pem
 
 # Copy start script
 COPY docker/start.sh /start.sh
