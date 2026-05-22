@@ -1,4 +1,4 @@
-FROM php:8.4-fpm
+FROM php:8.2-fpm
 
 # Set working directory
 WORKDIR /var/www/html
@@ -6,8 +6,7 @@ WORKDIR /var/www/html
 RUN apt-get update && apt-get install -y \
     libfreetype6-dev libjpeg62-turbo-dev libpng-dev libwebp-dev libxpm-dev \
     libzip-dev zip unzip git curl libonig-dev libxml2-dev \
-    default-mysql-client nginx nodejs npm supervisor \
-    php-mysql
+    default-mysql-client nginx nodejs npm supervisor
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm && \
     docker-php-ext-install gd pdo pdo_mysql mbstring bcmath exif pcntl zip
@@ -56,7 +55,6 @@ RUN rm -f /etc/nginx/sites-enabled/default && \
 # Copy Supervisor config
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/ssl/ca.pem /etc/ssl/certs/ca.pem
-
 # Copy start script
 COPY docker/start.sh /start.sh
 RUN sed -i 's/\r$//' /start.sh && chmod +x /start.sh
