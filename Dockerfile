@@ -1,4 +1,4 @@
-FROM php:8.2-fpm
+FROM php:8.4-fpm
 
 # Set working directory
 WORKDIR /var/www/html
@@ -8,9 +8,10 @@ RUN apt-get update && apt-get install -y \
     libzip-dev zip unzip git curl libonig-dev libxml2-dev \
     default-mysql-client nginx nodejs npm supervisor
 
+# ✅ Added mysqli + docker-php-ext-enable to ensure drivers load in CLI & FPM contexts
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm && \
-    docker-php-ext-install gd pdo pdo_mysql mbstring bcmath exif pcntl zip
-
+    docker-php-ext-install gd pdo pdo_mysql mysqli mbstring bcmath exif pcntl zip && \
+    docker-php-ext-enable pdo_mysql mysqli
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -52,16 +53,13 @@ RUN rm -f /etc/nginx/sites-enabled/default && \
     "        deny all;" \
     "    }" \
     "}" > /etc/nginx/conf.d/default.conf
-    
+
 # Copy Supervisor config
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/ssl/ca.pem /etc/ssl/certs/ca.pem
-
-
 # Copy start script
 COPY docker/start.sh /start.sh
 RUN sed -i 's/\r$//' /start.sh && chmod +x /start.sh
-
 
 # Expose port
 EXPOSE 80
