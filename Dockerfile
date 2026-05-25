@@ -13,6 +13,14 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-x
     docker-php-ext-install gd pdo pdo_mysql mysqli mbstring bcmath exif pcntl zip && \
     docker-php-ext-enable pdo_mysql mysqli
 
+    # Configure PHP for file uploads
+RUN printf "%s\n" \
+    "[PHP]" \
+    "upload_max_filesize = 100M" \
+    "post_max_size = 100M" \
+    "memory_limit = 512M" \
+    "max_input_time = 300" \
+    "max_execution_time = 300" > /usr/local/etc/php/conf.d/uploads.ini
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
