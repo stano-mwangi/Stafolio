@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Fix permissions
-chown -R www-data:www-data /var/www/html/storage
-chmod -R 775 /var/www/html/storage
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Run artisan commands safely as www-data
 su -s /bin/bash www-data -c "php artisan migrate --force"

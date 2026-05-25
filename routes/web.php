@@ -3,6 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Admin\ProjectCategoryController;
+use App\Http\Controllers\Admin\ProjectSectionController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\TechnologyController;
 use App\Http\Controllers\EducationController;
@@ -23,6 +26,10 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::post('/track-event', [EventController::class, 'store']);
 
+// Public project routes
+Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -32,12 +39,27 @@ Route::middleware('auth')->group(function () {
     Route::patch('/admin/pages/{key}', [PageController::class, 'updateContent'])->name('admin.pages.update');
 
     // Admin routes for managing projects
-    Route::get('/admin/projects', [ProjectController::class, 'index'])->name('admin.projects.index');
-    Route::get('/admin/projects/create', [ProjectController::class, 'create'])->name('admin.projects.create');
-    Route::post('/admin/projects', [ProjectController::class, 'store'])->name('admin.projects.store');
-    Route::get('/admin/projects/{project}/edit', [ProjectController::class, 'edit'])->name('admin.projects.edit');
-    Route::put('/admin/projects/{project}', [ProjectController::class, 'update'])->name('admin.projects.update');
-    Route::delete('/admin/projects/{project}', [ProjectController::class, 'destroy'])->name('admin.projects.destroy');
+    Route::get('/admin/projects', [AdminProjectController::class, 'index'])->name('admin.projects.index');
+    Route::get('/admin/projects/create', [AdminProjectController::class, 'create'])->name('admin.projects.create');
+    Route::post('/admin/projects', [AdminProjectController::class, 'store'])->name('admin.projects.store');
+    Route::get('/admin/projects/{project}/edit', [AdminProjectController::class, 'edit'])->name('admin.projects.edit');
+    Route::put('/admin/projects/{project}', [AdminProjectController::class, 'update'])->name('admin.projects.update');
+    Route::delete('/admin/projects/{project}', [AdminProjectController::class, 'destroy'])->name('admin.projects.destroy');
+    Route::post('/admin/projects/reorder', [AdminProjectController::class, 'reorder'])->name('admin.projects.reorder');
+
+    // Admin routes for project categories
+    Route::get('/admin/categories', [ProjectCategoryController::class, 'index'])->name('admin.categories.index');
+    Route::get('/admin/categories/create', [ProjectCategoryController::class, 'create'])->name('admin.categories.create');
+    Route::post('/admin/categories', [ProjectCategoryController::class, 'store'])->name('admin.categories.store');
+    Route::get('/admin/categories/{category}/edit', [ProjectCategoryController::class, 'edit'])->name('admin.categories.edit');
+    Route::put('/admin/categories/{category}', [ProjectCategoryController::class, 'update'])->name('admin.categories.update');
+    Route::delete('/admin/categories/{category}', [ProjectCategoryController::class, 'destroy'])->name('admin.categories.destroy');
+
+    // Admin routes for project sections
+    Route::post('/admin/sections', [ProjectSectionController::class, 'store'])->name('admin.sections.store');
+    Route::put('/admin/sections/{section}', [ProjectSectionController::class, 'update'])->name('admin.sections.update');
+    Route::delete('/admin/sections/{section}', [ProjectSectionController::class, 'destroy'])->name('admin.sections.destroy');
+    Route::post('/admin/sections/reorder', [ProjectSectionController::class, 'reorder'])->name('admin.sections.reorder');
 
     // Admin routes for managing skills
     Route::get('/admin/skills', [SkillController::class, 'index'])->name('admin.skills.index');
@@ -68,7 +90,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/ask-agent',[AgentController::class,'ask']);
-Route::view('/projects','projects')->name('projects');
 Route::view('/about','about')->name('about');
 Route::view('/contact','contact')->name('contact');
 Route::post('/contact/send',[ContactController::class,'send'])->name('contact.send');
